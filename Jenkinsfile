@@ -2,31 +2,24 @@ pipeline {
     agent any
 
     stages {
-        HEAD
         stage('Build') {
             steps {
-                echo 'Building...'
+                echo 'Building the project...'
             }
         }
+
         stage('Test') {
             steps {
                 echo 'Running tests...'
             }
         }
+
         stage('Deploy') {
             steps {
-                echo 'Deploying...'
-        stage('Install Dependencies') {
-            steps {
-                // Install dependencies from requirements.txt
-                sh 'pip install -r requirements.txt'
+                echo 'Deploying the project...'
             }
         }
-        stage('Run Tests') {
-            steps {
-                // Run your test suite
-                sh 'pytest'
-            }
-        }
-    }
-}
+   }  
+
+}  
+
