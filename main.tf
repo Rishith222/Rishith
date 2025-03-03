@@ -1,5 +1,6 @@
-resource "null_resource" "local_provisioner" {
+resource "terraform_data" "example1" {
   provisioner "local-exec" {
-    command = "echo 'Provisioning complete!' > /tmp/provisioning.log"
+    command     = "open WFH, '>completed.txt' and print WFH scalar localtime"
+    interpreter = ["perl", "-e"]
   }
 }
