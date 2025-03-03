@@ -1,4 +1,4 @@
-            environment: '""'
+            environment: '"dev"'
             app_name: '""'
             version: "1.0.0"
             EOF
