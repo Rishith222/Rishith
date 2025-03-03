@@ -1,5 +1,7 @@
-                    environment: null
-                    app_name: null
-                    version: 1.0.0
-                    EOF
-                    
+            environment: '""'
+            app_name: '""'
+            version: "1.0.0"
+            EOF
+            echo "Generated config.yaml:"
+            cat config.yaml
+            
