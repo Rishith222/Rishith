@@ -57,9 +57,17 @@ resource "null_resource" "local_node" {
   }
 }
 
-output "node_ip" {
-  value = "158.101.11.87"
+provider "null" {}
+
+resource "null_resource" "create_folder_and_file" {
+  provisioner "local-exec" {
+    command = <<EOT
+    mkdir -p /tmp/myfolder
+    echo "Hello, Terraform!" > /tmp/myfolder/myfile.txt
+    EOT
+  }
 }
+
 
 variable "env" {
   default = "dev"
