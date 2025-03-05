@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 terraform {
   required_providers {
 <<<<<<< HEAD
@@ -48,14 +49,21 @@ resource "docker_container" "jenkins_docker_agent" {
   restart = "always"
 =======
 resource "null_resource" "local_node" {
+=======
+provider "local" {}
+
+resource "local_file" "example_file" {
+  filename = "${path.module}/example-folder/hello.txt"
+  content  = "This is created by Terraform inside a Docker agent!"
+}
+
+resource "null_resource" "create_folder" {
+>>>>>>> 76e8b33 (Update main.tf)
   provisioner "local-exec" {
-    command = <<EOT
-      echo "env: ${var.env}" > config.yaml
-      echo "region: ${var.region}" >> config.yaml
-      echo "node_ip: 158.101.11.87" >> config.yaml
-    EOT
+    command = "mkdir -p ${path.module}/example-folder"
   }
 }
+<<<<<<< HEAD
 
 provider "null" {}
 
@@ -77,3 +85,5 @@ variable "region" {
   default = "local"
 >>>>>>> 2051675 (Update main.tf)
 }
+=======
+>>>>>>> 76e8b33 (Update main.tf)
