@@ -1,26 +1,12 @@
-terraform {
-  required_providers {
-    github = {
-      source  = "integrations/github"
-      version = "~> 5.0"
-    }
+provider "local" {}
+
+resource "local_file" "example_directory" {
+  filename = "${path.module}/my_folder/example.txt"
+  content  = "This is an example file created by Terraform."
+}
+
+resource "null_resource" "create_folder" {
+  provisioner "local-exec" {
+    command = "mkdir -p ${path.module}/my_folder"
   }
-}
-
-provider "github" {
-  token = var.github_token  # Use a personal access token (PAT) with repo access
-}
-
-variable "github_token" {}
-
-variable "repo_name" {
-  default = "Rishith222"
-}
-
-resource "github_repository_file" "example_file" {
-  repository          = var.repo_name
-  branch             = "master"
-  file               = "my_folder/example.txt"
-  content            = "This is a sample file created by Terraform."
-  commit_message     = "Added example.txt via Terraform"
 }
