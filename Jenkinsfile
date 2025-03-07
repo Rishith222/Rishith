@@ -1,25 +1,44 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'my-jenkins-agent:latest'  // Use the Docker agent with Terraform installed
+            args '--user root'  // Run as root to allow file operations
+        }
+    }
+
+    environment {
+        TF_VAR_REGION = 'us-west-2'  // Example Terraform environment variable
+    }
 
     stages {
-        stage('Build') {
+        stage('Clone Terraform Repo') {
             steps {
-                echo 'Building the project...'
+                sh 'rm -rf terraform-project && git clone https://github.com/Rishith222/your-terraform-repo.git terraform-project'
             }
         }
 
-        stage('Test') {
+        stage('Terraform Init') {
             steps {
-                echo 'Running tests...'
+                dir('terraform-project') {  // Navigate inside the Terraform directory
+                    sh 'terraform init'
+                }
             }
         }
 
-        stage('Deploy') {
+        stage('Terraform Plan') {
             steps {
-                echo 'Deploying the project...'
+                dir('terraform-project') {
+                    sh 'terraform plan -out=tfplan'
+                }
             }
         }
-   }  
 
-}  
-
+        stage('Terraform Apply') {
+            steps {
+                dir('terraform-project') {
+                    sh 'terraform apply -auto-approve tfplan'
+                }
+            }
+        }
+    }
+}
