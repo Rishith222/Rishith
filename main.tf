@@ -1,12 +1,19 @@
 terraform {
   required_providers {
+<<<<<<< HEAD
     docker = {
       source  = "kreuzwerker/docker"
       version = "~> 3.0"
+=======
+    null = {
+      source  = "hashicorp/null"
+      version = "~> 3.2"
+>>>>>>> 2051675 (Update main.tf)
     }
   }
 }
 
+<<<<<<< HEAD
 provider "docker" {
   host = "unix:///var/run/docker.sock"  # Ensure Jenkins has access to this
 }
@@ -39,4 +46,26 @@ resource "docker_container" "jenkins_docker_agent" {
   }
 
   restart = "always"
+=======
+resource "null_resource" "local_node" {
+  provisioner "local-exec" {
+    command = <<EOT
+      echo "env: ${var.env}" > config.yaml
+      echo "region: ${var.region}" >> config.yaml
+      echo "node_ip: 158.101.11.87" >> config.yaml
+    EOT
+  }
+}
+
+output "node_ip" {
+  value = "158.101.11.87"
+}
+
+variable "env" {
+  default = "dev"
+}
+
+variable "region" {
+  default = "local"
+>>>>>>> 2051675 (Update main.tf)
 }
