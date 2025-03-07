@@ -1,12 +1,43 @@
-provider "local" {}
-
-resource "local_file" "example_directory" {
-  filename = "${path.module}/my_folder/example.txt"
-  content  = "This is an example file created by Terraform."
-}
-
-resource "null_resource" "create_folder" {
-  provisioner "local-exec" {
-    command = "mkdir -p ${path.module}/my_folder"
+terraform {
+  required_providers {
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "~> 3.0"
+    }
   }
 }
+
+provider "docker" {
+  host = "unix:///var/run/docker.sock"  # Ensure Jenkins has access to this
+}
+
+resource "docker_image" "jenkins_agent" {
+  name = "my-jenkins-agent:latest"
+  keep_locally = true
+}
+
+resource "docker_container" "jenkins_docker_agent" {
+  name  = "jenkins-docker-agent"
+  image = docker_image.jenkins_agent.name
+
+  # Attach Docker socket for Jenkins agent to run containers
+  volumes {
+    host_path      = "/var/run/docker.sock"
+    container_path = "/var/run/docker.sock"
+  }
+
+  # Set Jenkins workspace
+  volumes {
+    host_path      = "/var/lib/jenkins/workspace"
+    container_path = "/var/lib/jenkins/workspace"
+  }
+
+  # Expose ports if needed
+  ports {
+    internal = 8080
+    external = 8081
+  }
+
+  restart = "always"
+}
+
