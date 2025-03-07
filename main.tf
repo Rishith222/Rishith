@@ -1,12 +1,42 @@
-resource "terraform_data" "example1" {
-  provisioner "local-exec" {
-    command     = "open WFH, '>completed.txt' and print WFH scalar localtime"
-    interpreter = ["perl", "-e"]
-  }
-}
-resource "null_resource" "create_completed_file" {
-  provisioner "local-exec" {
-    command = "echo 'Terraform execution completed' > completed.txt"
+terraform {
+  required_providers {
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "~> 3.0"
+    }
   }
 }
 
+provider "docker" {
+  host = "unix:///var/run/docker.sock"  # Ensure Jenkins has access to this
+}
+
+resource "docker_image" "jenkins_agent" {
+  name = "my-jenkins-agent:latest"
+  keep_locally = true
+}
+
+resource "docker_container" "jenkins_docker_agent" {
+  name  = "jenkins-docker-agent"
+  image = docker_image.jenkins_agent.name
+
+  # Attach Docker socket for Jenkins agent to run containers
+  volumes {
+    host_path      = "/var/run/docker.sock"
+    container_path = "/var/run/docker.sock"
+  }
+
+  # Set Jenkins workspace
+  volumes {
+    host_path      = "/var/lib/jenkins/workspace"
+    container_path = "/var/lib/jenkins/workspace"
+  }
+
+  # Expose ports if needed
+  ports {
+    internal = 8080
+    external = 8081
+  }
+
+  restart = "always"
+}
