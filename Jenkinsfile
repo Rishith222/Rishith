@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Clone Terraform Repo') {
             steps {
-                sh 'rm -rf terraform-project && git clone https://github.com/Rishith222/your-terraform-repo.git terraform-project'
+                sh 'rm -rf terraform-project && git clone https://github.com/Rishith222/Rishith.git terraform-project'
             }
         }
 
