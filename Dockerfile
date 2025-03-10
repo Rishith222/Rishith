@@ -23,6 +23,21 @@ COPY requirements.txt .
 RUN python3 -m venv /myapp
 RUN /myapp/bin/pip install -r requirements.txt
 
+FROM jenkins/jenkins:lts
+
+# Switch to root user to install packages
+USER root
+
+# Install Docker inside the container
+RUN apt update && apt install -y docker.io
+
+# Allow the 'jenkins' user to use Docker
+RUN usermod -aG docker jenkins
+
+# Switch back to the Jenkins user
+USER jenkins
+
+
 # **Final Runtime Image**
 FROM python:3.9
 
