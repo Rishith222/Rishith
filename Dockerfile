@@ -18,6 +18,19 @@ COPY requirements.txt /myapp/
 RUN python3 -m venv /myapp
 RUN /myapp/bin/pip install -r requirements.txt
 
+FROM python:3.9
+
+WORKDIR /myapp
+
+COPY myapp.py /myapp/
+COPY requirements.txt /myapp/
+
+RUN pip install -r requirements.txt
+
+CMD ["python3", "/myapp/myapp.py"]
+CMD ["tail", "-f", "/dev/null"]  
+CMD ["sh", "-c", "python3 /myapp/myapp.py && tail -f /dev/null"]
+
 # Runtime Image
 FROM alpine AS runtime-image
 
