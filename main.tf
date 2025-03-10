@@ -42,6 +42,7 @@ resource "docker_container" "jenkins_docker_agent" {
 lifecycle {
     prevent_destroy = false
     replace_triggered_by = [docker_image.jenkins_agent]
+ignore_changes = [name]  
  }
 
 }
