@@ -21,6 +21,7 @@ resource "docker_container" "jenkins_docker_agent" {
   image = docker_image.jenkins_agent.name
   restart = "always"
   must_run = true
+start        = true
   
   # Attach Docker socket for Jenkins agent to run containers
   volumes {
@@ -41,8 +42,7 @@ resource "docker_container" "jenkins_docker_agent" {
   }
 lifecycle {
     prevent_destroy = false
-    replace_triggered_by = [docker_image.jenkins_agent]
-ignore_changes = [name]  
+    replace_triggered_by = [docker_image.jenkins_agent.id]
  }
 
 }
