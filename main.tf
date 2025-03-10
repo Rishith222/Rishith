@@ -18,10 +18,10 @@ resource "docker_image" "jenkins_agent" {
 
 resource "docker_container" "jenkins_docker_agent" {
   name  = "jenkins-docker-agent"
-  image = docker_image.jenkins_agent.name
+  image = "my-jenkins-agent:latest"
   restart = "always"
   must_run = true
-start        = true
+start = true
   
   # Attach Docker socket for Jenkins agent to run containers
   volumes {
