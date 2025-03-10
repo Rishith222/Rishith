@@ -2,7 +2,7 @@
 FROM alpine AS compile-image
 
 # Install dependencies
-RUN apk add --no-cache \
+RUN apk update && apk add --no-cache \
     python3 \
     py-pip \
     openssl \
@@ -11,7 +11,9 @@ RUN apk add --no-cache \
     build-base \
     wget \
     curl \
-    unzip
+    unzip \
+    docker
+
 
 # Set working directory
 WORKDIR /myapp
