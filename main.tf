@@ -19,7 +19,9 @@ resource "docker_image" "jenkins_agent" {
 resource "docker_container" "jenkins_docker_agent" {
   name  = "jenkins-docker-agent"
   image = docker_image.jenkins_agent.name
-
+  restart = "always"
+  must_run = true
+  
   # Attach Docker socket for Jenkins agent to run containers
   volumes {
     host_path      = "/var/run/docker.sock"
@@ -37,7 +39,9 @@ resource "docker_container" "jenkins_docker_agent" {
     internal = 8080
     external = 8081
   }
+lifecycle {
+    create_before_destroy = true
+  }
 
-  restart = "always"
 }
 
