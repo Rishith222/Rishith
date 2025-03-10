@@ -40,8 +40,8 @@ resource "docker_container" "jenkins_docker_agent" {
     external = 8081
   }
 lifecycle {
-     prevent_destroy = false
-    replace_triggered_by = [self.image_id]
+    prevent_destroy = false
+    replace_triggered_by = [docker_image.jenkins_agent]
  }
 
 }
