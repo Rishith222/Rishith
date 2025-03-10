@@ -12,8 +12,6 @@ RUN apk add --no-cache \
     curl \
     unzip
 
-WORKDIR /myapp
-
 COPY requirements.txt /myapp/
 RUN python3 -m venv /myapp
 RUN /myapp/bin/pip install -r requirements.txt
