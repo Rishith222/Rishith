@@ -37,6 +37,9 @@ RUN usermod -aG docker jenkins
 # Ensure Docker is in the PATH
 ENV PATH="/usr/bin:$PATH"
 
+# **Setup Jenkins User Home & Permissions**
+RUN mkdir -p /home/jenkins && chown -R jenkins:jenkins /home/jenkins
+
 # Install additional runtime dependencies
 RUN apt-get update && apt-get install -y wget unzip && \
     wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip && \
@@ -50,8 +53,14 @@ WORKDIR /myapp
 COPY myapp.py .
 COPY --from=compile-image /myapp/ ./
 
+
+
 # Switch back to Jenkins user
 USER jenkins
+
+
+# **Download Jenkins Agent JAR**
+RUN wget -O /home/jenkins/agent.jar http://158.101.11.87:8080/jnlpJars/agent.jar
 
 # Keep container running and start the app
 CMD ["sh", "-c", "python3 /myapp/myapp.py && tail -f /dev/null"]
