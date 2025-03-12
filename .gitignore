@@ -1,1 +1,4 @@
 .terraform/
+agent.jar
+jenkins-cli.jar
+secret-file
